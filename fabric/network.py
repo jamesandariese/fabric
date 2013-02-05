@@ -220,14 +220,11 @@ def normalize(host_string, omit_port=False):
     port = env.port or env.default_port
     # SSH config data
     conf = ssh_config(host_string)
-    # Only use ssh_config values if the env value appears unmodified from
-    # the true defaults. If the user has tweaked them, that new value
-    # takes precedence.
-    if user == env.local_user and 'user' in conf:
+    # Override env with configuration from ssh config
+    if 'user' in conf:
         user = conf['user']
-    if port == env.default_port and 'port' in conf:
+    if 'port' in conf:
         port = conf['port']
-    # Also override host if needed
     if 'hostname' in conf:
         host = conf['hostname']
     # Merge explicit user/port values with the env/ssh_config derived ones
